@@ -185,6 +185,59 @@ export class Renderer {
     }
 
     /**
+     * Set zoom scale directly
+     * @param {number} newScale 
+     */
+    setScale(newScale) {
+        this.scale = clamp(newScale, 0.5, 3);
+        this.render();
+    }
+
+    /**
+     * Toggle layer visibility
+     * @param {string} layer 
+     * @param {boolean} visible 
+     */
+    toggleLayer(layer, visible) {
+        if (this.layers.hasOwnProperty(layer)) {
+            this.layers[layer] = visible;
+            this.render();
+        }
+    }
+
+    /**
+     * Start panning
+     * @param {number} x 
+     * @param {number} y 
+     */
+    startPan(x, y) {
+        this.isPanning = true;
+        this.panStartX = x;
+        this.panStartY = y;
+        this.panOffsetStartX = this.offsetX;
+        this.panOffsetStartY = this.offsetY;
+    }
+
+    /**
+     * Pan the view
+     * @param {number} x 
+     * @param {number} y 
+     */
+    pan(x, y) {
+        if (!this.isPanning) return;
+        this.offsetX = this.panOffsetStartX + (x - this.panStartX);
+        this.offsetY = this.panOffsetStartY + (y - this.panStartY);
+        this.render();
+    }
+
+    /**
+     * Stop panning
+     */
+    stopPan() {
+        this.isPanning = false;
+    }
+
+    /**
      * Convert screen coordinates to grid coordinates
      * @param {number} screenX 
      * @param {number} screenY 
@@ -399,7 +452,7 @@ export class Renderer {
     }
 
     /**
-     * Draw transit routes
+     * Draw transit routes with minimal, clean design using MST
      */
     drawTransitRoutes(cellSize) {
         const ctx = this.ctx;
@@ -416,36 +469,81 @@ export class Renderer {
 
         if (transitHubs.length < 2) return;
 
-        // Draw connections between nearby transit hubs
-        ctx.strokeStyle = 'rgba(236, 72, 153, 0.6)';
-        ctx.lineWidth = 3;
-
+        // Build Minimum Spanning Tree using Kruskal's algorithm
+        const edges = [];
         for (let i = 0; i < transitHubs.length; i++) {
             for (let j = i + 1; j < transitHubs.length; j++) {
                 const hub1 = transitHubs[i];
                 const hub2 = transitHubs[j];
-                const dist = Math.abs(hub1.x - hub2.x) + Math.abs(hub1.y - hub2.y);
-
-                if (dist < this.city.gridSize / 3) {
-                    const screen1 = this.gridToScreen(hub1.x + 0.5, hub1.y + 0.5);
-                    const screen2 = this.gridToScreen(hub2.x + 0.5, hub2.y + 0.5);
-
-                    ctx.beginPath();
-                    ctx.moveTo(screen1.x, screen1.y);
-                    ctx.lineTo(screen2.x, screen2.y);
-                    ctx.stroke();
-                }
+                const dist = Math.sqrt(Math.pow(hub1.x - hub2.x, 2) + Math.pow(hub1.y - hub2.y, 2));
+                edges.push({ i, j, dist, hub1, hub2 });
             }
         }
 
-        // Draw transit hub markers
-        ctx.fillStyle = '#ec4899';
+        edges.sort((a, b) => a.dist - b.dist);
+
+        // Union-Find for MST
+        const parent = transitHubs.map((_, idx) => idx);
+        const find = (x) => {
+            if (parent[x] !== x) parent[x] = find(parent[x]);
+            return parent[x];
+        };
+        const union = (x, y) => {
+            const px = find(x), py = find(y);
+            if (px !== py) { parent[px] = py; return true; }
+            return false;
+        };
+
+        // Select MST edges
+        const mstEdges = [];
+        for (const edge of edges) {
+            if (union(edge.i, edge.j)) {
+                mstEdges.push(edge);
+                if (mstEdges.length === transitHubs.length - 1) break;
+            }
+        }
+
+        // Draw clean route lines
+        ctx.lineCap = 'round';
+
+        mstEdges.forEach((edge, idx) => {
+            const screen1 = this.gridToScreen(edge.hub1.x + 0.5, edge.hub1.y + 0.5);
+            const screen2 = this.gridToScreen(edge.hub2.x + 0.5, edge.hub2.y + 0.5);
+
+            // Simple clean line
+            ctx.strokeStyle = 'rgba(236, 72, 153, 0.7)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(screen1.x, screen1.y);
+            ctx.lineTo(screen2.x, screen2.y);
+            ctx.stroke();
+
+            // Single animated train dot
+            const phase = ((this.time * 0.015) + (idx * 0.3)) % 1;
+            const trainX = screen1.x + (screen2.x - screen1.x) * phase;
+            const trainY = screen1.y + (screen2.y - screen1.y) * phase;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(trainX, trainY, 4, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        // Draw minimal station markers
         transitHubs.forEach(hub => {
             const screen = this.gridToScreen(hub.x + 0.5, hub.y + 0.5);
-            const pulse = 0.8 + 0.2 * Math.sin(this.time * ANIMATION.pulseSpeed * 2);
 
+            // Outer ring
+            ctx.strokeStyle = '#ec4899';
+            ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(screen.x, screen.y, 5 * pulse, 0, Math.PI * 2);
+            ctx.arc(screen.x, screen.y, 7, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Inner dot
+            ctx.fillStyle = '#ec4899';
+            ctx.beginPath();
+            ctx.arc(screen.x, screen.y, 4, 0, Math.PI * 2);
             ctx.fill();
         });
     }

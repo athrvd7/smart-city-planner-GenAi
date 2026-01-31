@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI-powered smart city planning visualization system for sustainable urban development">
+  <meta name="description" content="AI-powered smart city planning visualization system with 3D views and PDF export">
   <title>Smart City Planner | AI-Powered Urban Planning</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/styles/index.css">
 </head>
+
 <body>
   <div id="app">
     <!-- Header -->
@@ -17,7 +19,7 @@
       <div class="logo">
         <div class="logo-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6h6v6M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/>
+            <path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6h6v6M9 9h.01M15 9h.01M9 13h.01M15 13h.01" />
           </svg>
         </div>
         <div class="logo-text">
@@ -26,16 +28,34 @@
         </div>
       </div>
       <div class="header-actions">
+        <button class="btn btn-ghost" id="btn-settings" title="API Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+          <span>Settings</span>
+        </button>
         <button class="btn btn-ghost" id="btn-help">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
           </svg>
           <span>Help</span>
         </button>
+        <button class="btn btn-secondary" id="btn-pdf-export">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+          <span>PDF Report</span>
+        </button>
         <button class="btn btn-primary" id="btn-export">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
           </svg>
           <span>Export</span>
         </button>
@@ -50,40 +70,41 @@
           <div class="toolbar-group">
             <button class="tool-btn active" data-tool="select" title="Select">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3zM13 13l6 6"/>
+                <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3zM13 13l6 6" />
               </svg>
             </button>
             <button class="tool-btn" data-tool="residential" title="Residential Zone">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
               </svg>
             </button>
             <button class="tool-btn" data-tool="commercial" title="Commercial Zone">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
               </svg>
             </button>
             <button class="tool-btn" data-tool="industrial" title="Industrial Zone">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+                <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
               </svg>
             </button>
             <button class="tool-btn" data-tool="green" title="Green Space">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M12 22V8M5 12H2a10 10 0 0 0 20 0h-3M12 8a5 5 0 0 0-5-5 5 5 0 0 0 5 5 5 5 0 0 0 5-5 5 5 0 0 0-5 5"/>
+                <path
+                  d="M12 22V8M5 12H2a10 10 0 0 0 20 0h-3M12 8a5 5 0 0 0-5-5 5 5 0 0 0 5 5 5 5 0 0 0 5-5 5 5 0 0 0-5 5" />
               </svg>
             </button>
             <button class="tool-btn" data-tool="transit" title="Transit Hub">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
-                <path d="M16 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2M5 18v2M12 18v2M4 13h10"/>
+                <rect x="1" y="3" width="15" height="13" rx="2" ry="2" />
+                <path d="M16 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2M5 18v2M12 18v2M4 13h10" />
               </svg>
             </button>
             <button class="tool-btn" data-tool="road" title="Roads">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M4 19V5M20 19V5M12 3v3M12 12v3M12 21v-3"/>
+                <path d="M4 19V5M20 19V5M12 3v3M12 12v3M12 21v-3" />
               </svg>
             </button>
           </div>
@@ -91,23 +112,39 @@
           <div class="toolbar-group">
             <button class="tool-btn" id="btn-zoom-in" title="Zoom In">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/>
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3M11 8v6M8 11h6" />
               </svg>
             </button>
             <button class="tool-btn" id="btn-zoom-out" title="Zoom Out">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M8 11h6"/>
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3M8 11h6" />
               </svg>
             </button>
             <button class="tool-btn" id="btn-reset-view" title="Reset View">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M21 21l-6-6m6 6v-4.8m0 4.8h-4.8M3 16.2V21m0 0h4.8M3 21l6-6M21 7.8V3m0 0h-4.8M21 3l-6 6M3 7.8V3m0 0h4.8M3 3l6 6"/>
+                <path
+                  d="M21 21l-6-6m6 6v-4.8m0 4.8h-4.8M3 16.2V21m0 0h4.8M3 21l6-6M21 7.8V3m0 0h-4.8M21 3l-6 6M3 7.8V3m0 0h4.8M3 3l6 6" />
               </svg>
+            </button>
+          </div>
+          <div class="toolbar-divider"></div>
+          <!-- 3D Toggle -->
+          <div class="toolbar-group">
+            <button class="tool-btn" id="btn-toggle-3d" title="Toggle 3D View">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M12 3L2 9l10 6 10-6-10-6z" />
+                <path d="M2 15l10 6 10-6" />
+                <path d="M2 9l10 6 10-6" />
+              </svg>
+              <span class="btn-label">3D</span>
             </button>
           </div>
         </div>
         <div class="canvas-container" id="canvas-container">
           <canvas id="city-canvas"></canvas>
+          <div id="canvas-3d" class="canvas-3d hidden"></div>
           <div class="canvas-overlay" id="canvas-overlay"></div>
         </div>
         <div class="canvas-info">
@@ -123,6 +160,10 @@
             <span class="info-label">Position:</span>
             <span class="info-value" id="cursor-pos">-</span>
           </div>
+          <div class="info-item view-mode">
+            <span class="info-label">View:</span>
+            <span class="info-value" id="view-mode">2D</span>
+          </div>
         </div>
       </section>
 
@@ -132,25 +173,37 @@
         <div class="tab-nav">
           <button class="tab-btn active" data-tab="generate">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M12 3v3m6.36-.64-2.12 2.12M21 12h-3M18.36 18.36l-2.12-2.12M12 21v-3M5.64 18.36l2.12-2.12M3 12h3M5.64 5.64l2.12 2.12"/>
+              <path
+                d="M12 3v3m6.36-.64-2.12 2.12M21 12h-3M18.36 18.36l-2.12-2.12M12 21v-3M5.64 18.36l2.12-2.12M3 12h3M5.64 5.64l2.12 2.12" />
             </svg>
             AI Generate
           </button>
           <button class="tab-btn" data-tab="simulate">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <polygon points="5 3 19 12 5 21 5 3"/>
+              <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
             Simulate
           </button>
+          <button class="tab-btn" data-tab="compare">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            Compare
+          </button>
           <button class="tab-btn" data-tab="metrics">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M3 3v18h18M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+              <path d="M3 3v18h18M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
             </svg>
             Metrics
           </button>
           <button class="tab-btn" data-tab="layers">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+              <polygon points="12 2 2 7 12 12 22 7 12 2" />
+              <polyline points="2 17 12 22 22 17" />
+              <polyline points="2 12 12 17 22 12" />
             </svg>
             Layers
           </button>
@@ -162,12 +215,18 @@
           <div class="tab-panel active" data-panel="generate">
             <div class="panel-section">
               <h3 class="section-title">AI City Generator</h3>
+              <div class="api-status" id="api-status">
+                <span class="status-indicator demo"></span>
+                <span class="status-text">Demo Mode (No API Key)</span>
+              </div>
               <p class="section-desc">Describe your ideal city and let AI generate a sustainable layout.</p>
               <div class="ai-input-group">
-                <textarea id="ai-prompt" class="ai-textarea" placeholder="E.g., Create a sustainable city for 500,000 people with focus on public transit, abundant green spaces, and renewable energy..."></textarea>
+                <textarea id="ai-prompt" class="ai-textarea"
+                  placeholder="E.g., Create a sustainable city for 500,000 people with focus on public transit, abundant green spaces, and renewable energy..."></textarea>
                 <button class="btn btn-primary btn-generate" id="btn-generate">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                    <path d="M12 3v3m6.36-.64-2.12 2.12M21 12h-3M18.36 18.36l-2.12-2.12M12 21v-3M5.64 18.36l2.12-2.12M3 12h3M5.64 5.64l2.12 2.12"/>
+                    <path
+                      d="M12 3v3m6.36-.64-2.12 2.12M21 12h-3M18.36 18.36l-2.12-2.12M12 21v-3M5.64 18.36l2.12-2.12M3 12h3M5.64 5.64l2.12 2.12" />
                   </svg>
                   Generate City
                 </button>
@@ -195,13 +254,28 @@
               </div>
             </div>
             <div class="panel-section">
+              <h3 class="section-title">Load Real-World Template</h3>
+              <select id="sample-city-select" class="select-input">
+                <option value="">Select a city template...</option>
+                <option value="copenhagen">🇩🇰 Copenhagen Model</option>
+                <option value="singapore">🇸🇬 Singapore Model</option>
+                <option value="curitiba">🇧🇷 Curitiba Model</option>
+                <option value="amsterdam">🇳🇱 Amsterdam Model</option>
+                <option value="portland">🇺🇸 Portland Model</option>
+                <option value="masdar">🇦🇪 Masdar City Model</option>
+                <option value="barcelona">🇪🇸 Barcelona Superblocks</option>
+                <option value="tokyo">🇯🇵 Tokyo TOD Model</option>
+              </select>
+            </div>
+            <div class="panel-section">
               <h3 class="section-title">City Parameters</h3>
               <div class="param-group">
                 <label class="param-label">
                   <span>Population Target</span>
                   <span class="param-value" id="pop-value">500,000</span>
                 </label>
-                <input type="range" class="slider" id="population-slider" min="50000" max="2000000" value="500000" step="50000">
+                <input type="range" class="slider" id="population-slider" min="50000" max="2000000" value="500000"
+                  step="50000">
               </div>
               <div class="param-group">
                 <label class="param-label">
@@ -267,19 +341,60 @@
                 <div class="time-buttons">
                   <button class="btn btn-sm" id="btn-play-sim">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                      <polygon points="5 3 19 12 5 21 5 3"/>
+                      <polygon points="5 3 19 12 5 21 5 3" />
                     </svg>
                     Play
                   </button>
                   <button class="btn btn-sm" id="btn-reset-sim">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                      <path d="M3 3v5h5"/>
+                      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                      <path d="M3 3v5h5" />
                     </svg>
                     Reset
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- Compare Tab (NEW) -->
+          <div class="tab-panel" data-panel="compare">
+            <div class="panel-section">
+              <h3 class="section-title">City Gallery</h3>
+              <p class="section-desc">Save and compare multiple city designs.</p>
+              <div class="save-city-group">
+                <input type="text" id="city-name-input" class="text-input" placeholder="Enter city name...">
+                <button class="btn btn-primary" id="btn-save-city">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
+                  </svg>
+                  Save Current City
+                </button>
+              </div>
+            </div>
+            <div class="panel-section">
+              <h3 class="section-title">Saved Cities</h3>
+              <div class="saved-cities-list" id="saved-cities-list">
+                <p class="empty-state">No saved cities yet. Save a city to compare.</p>
+              </div>
+            </div>
+            <div class="panel-section">
+              <h3 class="section-title">Comparison</h3>
+              <div class="compare-selectors">
+                <select id="compare-city-1" class="select-input">
+                  <option value="">Select City 1...</option>
+                </select>
+                <span class="vs-label">vs</span>
+                <select id="compare-city-2" class="select-input">
+                  <option value="">Select City 2...</option>
+                </select>
+              </div>
+              <button class="btn btn-secondary" id="btn-compare-cities" disabled>
+                Compare Cities
+              </button>
+              <div class="comparison-results" id="comparison-results"></div>
             </div>
           </div>
 
@@ -290,8 +405,8 @@
               <div class="score-display">
                 <div class="score-ring">
                   <svg viewBox="0 0 100 100">
-                    <circle class="score-bg" cx="50" cy="50" r="45"/>
-                    <circle class="score-progress" cx="50" cy="50" r="45" id="score-ring"/>
+                    <circle class="score-bg" cx="50" cy="50" r="45" />
+                    <circle class="score-progress" cx="50" cy="50" r="45" id="score-ring" />
                   </svg>
                   <div class="score-value" id="sustainability-score">78</div>
                 </div>
@@ -349,6 +464,38 @@
               <h3 class="section-title">Zone Distribution</h3>
               <div class="chart-container">
                 <canvas id="zone-chart"></canvas>
+              </div>
+            </div>
+            <div class="panel-section">
+              <h3 class="section-title">Live Traffic Simulation</h3>
+              <div class="traffic-stats-bar">
+                <div class="traffic-stat">
+                  <span class="traffic-stat-dot high"></span>
+                  <span class="traffic-stat-label">Heavy</span>
+                  <span class="traffic-stat-value" id="traffic-heavy">0%</span>
+                </div>
+                <div class="traffic-stat">
+                  <span class="traffic-stat-dot medium"></span>
+                  <span class="traffic-stat-label">Moderate</span>
+                  <span class="traffic-stat-value" id="traffic-moderate">0%</span>
+                </div>
+                <div class="traffic-stat">
+                  <span class="traffic-stat-dot low"></span>
+                  <span class="traffic-stat-label">Light</span>
+                  <span class="traffic-stat-value" id="traffic-light">0%</span>
+                </div>
+              </div>
+              <div class="traffic-chart-container">
+                <canvas id="traffic-chart"></canvas>
+              </div>
+              <div class="traffic-controls">
+                <button class="btn btn-sm" id="btn-toggle-traffic-sim">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                  Start Simulation
+                </button>
+                <span class="traffic-time-label" id="traffic-time">Time: 00:00</span>
               </div>
             </div>
           </div>
@@ -446,10 +593,33 @@
       </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div class="modal-overlay hidden" id="settings-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Settings</h2>
+          <button class="modal-close" id="close-settings">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="setting-group">
+            <label class="setting-label">Gemini API Key</label>
+            <p class="setting-desc">Enter your Google Gemini API key to enable real AI-powered city generation.</p>
+            <div class="api-key-input-group">
+              <input type="password" id="api-key-input" class="text-input" placeholder="Enter API key...">
+              <button class="btn btn-sm" id="toggle-api-key-visibility">Show</button>
+            </div>
+            <button class="btn btn-primary" id="save-api-key">Save API Key</button>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="help-link">Get an API Key →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Toast Container -->
     <div class="toast-container" id="toast-container"></div>
   </div>
 
   <script type="module" src="/src/main.js"></script>
 </body>
+
 </html>

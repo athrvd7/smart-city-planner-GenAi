@@ -9,9 +9,20 @@ export class CityModel {
     constructor(size = 'medium') {
         this.id = generateId();
         this.name = 'New City';
-        this.size = size;
-        this.gridSize = CITY_SIZES[size].grid;
-        this.targetPopulation = CITY_SIZES[size].population;
+
+        // Handle both string size keys ('small', 'medium', 'large') and numeric grid sizes
+        if (typeof size === 'number') {
+            // Direct grid size passed
+            this.size = size <= 60 ? 'small' : size <= 100 ? 'medium' : 'large';
+            this.gridSize = size;
+            this.targetPopulation = size <= 60 ? 100000 : size <= 100 ? 500000 : 2000000;
+        } else {
+            // String size key passed
+            this.size = size;
+            const sizeConfig = CITY_SIZES[size] || CITY_SIZES.medium;
+            this.gridSize = sizeConfig.grid;
+            this.targetPopulation = sizeConfig.population;
+        }
 
         // Initialize grid with empty zones
         this.grid = create2DArray(this.gridSize, this.gridSize, () => ({
@@ -377,11 +388,11 @@ export class CityModel {
     }
 
     /**
-     * Export city data as JSON
-     * @returns {string}
+     * Export city data as object
+     * @returns {Object}
      */
-    export() {
-        return JSON.stringify({
+    exportData() {
+        return {
             id: this.id,
             name: this.name,
             size: this.size,
@@ -390,16 +401,23 @@ export class CityModel {
             stats: this.stats,
             distribution: this.distribution,
             exportedAt: new Date().toISOString()
-        }, null, 2);
+        };
     }
 
     /**
-     * Import city data from JSON
-     * @param {string} json 
+     * Export city data as JSON string
+     * @returns {string}
      */
-    import(json) {
+    export() {
+        return JSON.stringify(this.exportData(), null, 2);
+    }
+
+    /**
+     * Import city data from object
+     * @param {Object} data 
+     */
+    importData(data) {
         try {
-            const data = JSON.parse(json);
             this.id = data.id || generateId();
             this.name = data.name || 'Imported City';
             this.size = data.size || 'medium';
@@ -409,6 +427,20 @@ export class CityModel {
             this.calculateStats();
             this.saveState();
             return true;
+        } catch (e) {
+            console.error('Failed to import city:', e);
+            return false;
+        }
+    }
+
+    /**
+     * Import city data from JSON string
+     * @param {string} json 
+     */
+    import(json) {
+        try {
+            const data = JSON.parse(json);
+            return this.importData(data);
         } catch (e) {
             console.error('Failed to import city:', e);
             return false;
