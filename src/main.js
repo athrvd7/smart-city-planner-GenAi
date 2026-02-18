@@ -1,7 +1,4 @@
-/* ========================================
-   Smart City Planner - Main Application v2.0
-   Enhanced with 3D, PDF Export, City Comparison
-   ======================================== */
+
 
 import { Chart, ArcElement, Tooltip, Legend, DoughnutController, LineController, LineElement, PointElement, LinearScale, CategoryScale, Filler } from 'chart.js';
 import { CityModel } from './engine/CityModel.js';
